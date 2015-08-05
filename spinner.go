@@ -5,9 +5,13 @@ import (
 	"time"
 )
 
+const (
+	BASIC_SPINNER = "-\\|/"
+)
+
 func FormatSpinner(format string) func() {
 	done := make(chan bool)
-	go syncFormatSpinner(format, done)
+	go syncFormatSpinner(format, BASIC_SPINNER, done)
 
 	return func() {
 		done <- true
@@ -22,12 +26,11 @@ func TopLeftFormatSpinner(format string) func() {
 	return FormatSpinner("[0;0H[K" + format)
 }
 
-func syncFormatSpinner(format string, done chan bool) {
+func syncFormatSpinner(format string, chars string, done chan bool) {
 	index := 0
-	spinner := "-\\|/"
 	for {
 		index += 1
-		char := spinner[index%len(spinner)]
+		char := chars[index%len(chars)]
 		select {
 		case _ = <-done:
 			fmt.Printf("\r[K")
