@@ -5,13 +5,15 @@ import (
 	"time"
 )
 
-const (
-	BASIC_SPINNER = "-\\|/"
+var (
+	BASIC_SPINNER   = []rune("-\\|/")
+	LOADING_SPINNER = []rune("█▉▊▋▌▍▎▏ ▏▎▍▌▋▊▉█")
+	SPINNING_WHEEL  = []rune("◴◷◶◵")
 )
 
 func FormatSpinner(format string) func() {
 	done := make(chan bool)
-	go syncFormatSpinner(format, BASIC_SPINNER, done)
+	go syncFormatSpinner(format, SPINNING_WHEEL, done)
 
 	return func() {
 		done <- true
@@ -26,7 +28,7 @@ func TopLeftFormatSpinner(format string) func() {
 	return FormatSpinner("[0;0H[K" + format)
 }
 
-func syncFormatSpinner(format string, chars string, done chan bool) {
+func syncFormatSpinner(format string, chars []rune, done chan bool) {
 	index := 0
 	for {
 		index += 1
