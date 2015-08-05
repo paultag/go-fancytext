@@ -7,13 +7,13 @@ import (
 
 var (
 	basicSpinner   = []rune("-\\|/")
-	loadingSpinner = []rune("█▉▊▋▌▍▎▏ ▏▎▍▌▋▊▉█")
+	loadingSpinner = []rune("█▉▊▋▌▍▎▏ ▁▂▃▄▅▆▇")
 	circleSpinner  = []rune("◴◷◶◵")
 )
 
 func FormatSpinner(format string) func() {
 	done := make(chan bool)
-	go syncFormatSpinner(format, circleSpinner, done)
+	go syncFormatSpinner(format, loadingSpinner, done)
 
 	return func() {
 		done <- true
