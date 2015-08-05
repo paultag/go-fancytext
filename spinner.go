@@ -30,7 +30,7 @@ func syncFormatSpinner(format string, done chan bool) {
 		char := spinner[index%len(spinner)]
 		select {
 		case _ = <-done:
-			fmt.Printf("[0;0H[K")
+			fmt.Printf("\r[K")
 			return
 		default:
 			fmt.Printf("\r")
