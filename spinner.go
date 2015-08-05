@@ -6,14 +6,14 @@ import (
 )
 
 var (
-	BASIC_SPINNER   = []rune("-\\|/")
-	LOADING_SPINNER = []rune("█▉▊▋▌▍▎▏ ▏▎▍▌▋▊▉█")
-	SPINNING_WHEEL  = []rune("◴◷◶◵")
+	basicSpinner   = []rune("-\\|/")
+	loadingSpinner = []rune("█▉▊▋▌▍▎▏ ▏▎▍▌▋▊▉█")
+	circleSpinner  = []rune("◴◷◶◵")
 )
 
 func FormatSpinner(format string) func() {
 	done := make(chan bool)
-	go syncFormatSpinner(format, SPINNING_WHEEL, done)
+	go syncFormatSpinner(format, circleSpinner, done)
 
 	return func() {
 		done <- true
