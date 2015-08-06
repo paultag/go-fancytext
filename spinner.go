@@ -16,7 +16,11 @@ func FormatSpinner(format string) func() {
 	go syncFormatSpinner(format, loadingSpinner, done)
 
 	return func() {
+		if done == nil {
+			return
+		}
 		done <- true
+		done = nil
 	}
 }
 
