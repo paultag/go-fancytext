@@ -13,7 +13,7 @@ var (
 
 func FormatSpinner(format string) func() {
 	done := make(chan bool)
-	go syncFormatSpinner(format, loadingSpinner, done)
+	go syncFormatSpinner(format, loadingSpinner, (time.Second / 8), done)
 
 	return func() {
 		if done == nil {
@@ -32,7 +32,7 @@ func TopLeftFormatSpinner(format string) func() {
 	return FormatSpinner("[0;0H[K" + format)
 }
 
-func syncFormatSpinner(format string, chars []rune, done chan bool) {
+func syncFormatSpinner(format string, chars []rune, speed time.Duration, done chan bool) {
 	index := 0
 	for {
 		index += 1
@@ -44,7 +44,7 @@ func syncFormatSpinner(format string, chars []rune, done chan bool) {
 		default:
 			fmt.Printf("\r")
 			fmt.Printf(format, string(char))
-			time.Sleep(time.Second / 8)
+			time.Sleep(speed)
 		}
 	}
 }
