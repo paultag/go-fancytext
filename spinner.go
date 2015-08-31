@@ -11,6 +11,24 @@ var (
 	circleSpinner  = []rune("◴◷◶◵")
 )
 
+func BooleanFormatSpinner(format string) func(bool) {
+	done := make(chan bool)
+	go syncFormatSpinner(format, loadingSpinner, (time.Second / 8), done)
+
+	return func(good bool) {
+		if done == nil {
+			return
+		}
+		done <- true
+		done = nil
+		char := "✓"
+		if !good {
+			char = "✗"
+		}
+		fmt.Printf(format+"\n", char)
+	}
+}
+
 func FormatSpinner(format string) func() {
 	done := make(chan bool)
 	go syncFormatSpinner(format, loadingSpinner, (time.Second / 8), done)
